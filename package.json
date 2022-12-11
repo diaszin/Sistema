@@ -1,0 +1,20 @@
+{
+  "name": "sd_cia",
+  "version": "1.0.0",
+  "description": "E um sistema cliente e funcionario para a materia de desenvolvimento web",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kaique Dias and Bruno Sousa",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "jquery": "^3.6.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.20"
+  }
+}

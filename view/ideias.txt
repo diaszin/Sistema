@@ -1,0 +1,1 @@
+tirar a barra de pesquisa do menu, só colocar na rota produtos em geral.
