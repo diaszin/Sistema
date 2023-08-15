@@ -2,13 +2,15 @@ const { query } = require("../db")
 const conexao = require("../db")
 
 class Produto {
-    add(nome,valor, data, quantidade,res) {
+    add(nome, valor, data, quantidade, marcaProduto, descricaoProduto,res) {
         const sql = "INSERT INTO produto SET ?"
         const values= {
             nome: nome,
             valor: valor,
             data_de_fabricacao: data,
-            quantidade: quantidade
+            quantidade: quantidade,
+            marca: marcaProduto,
+            descricao: descricaoProduto
         }
 
         conexao.query(sql, values, (erro, result) => {

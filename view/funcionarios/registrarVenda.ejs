@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - Funcionario</title>
+  <!-- Boostrap Links e Scripts ... -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Icones do Boostrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <!-- Lógica da Página -->
+  <script src="/jquery/dist/jquery.min.js" defer></script>
+  <script src="/js/actions.js" defer></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg text-bg-secondary">
+    <div class="container-fluid">
+        <a class="navbar-brand active" href="/">SD&Cia</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+              <li class="nav-item"><a class="nav-link" href="/venda">Vendas</a></li>
+              <li class="nav-item"><a class="nav-link" href="/funcionario">Produto</a></li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+  <%
+    if(data.length == 0){
+  %>
+    <main class="d-flex flex-column justify-content-center align-items-center" style="height: 35em;">
+      <h2 class="display-4 text-center">
+        Seja Bem Vindo ao nosso sistema de estoque
+      </h2>
+      <h3>Inicie sua primeira ação</h3>
+      <button class="btn btn-primary mt-3" data-toggle="modal" data-target="#modalCadastrar">Cadastrar uma venda <i class="bi bi-plus"></i></button>
+    </main>
+  <%
+    }
+  %>
+  <%
+    if(data.length > 0){
+  %>
+      <main>
+        <div class="container-fluid p-5 bg-light text-center">
+          <h1 class="display-4">Registrar Vendas</h1>
+        </div>
+        <h4>Lista dos Produtos</h4>
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          <div>
+            <button class="btn btn-primary mb-3 mt-3" data-toggle="modal" data-target="#modalCadastrar">Registrar Venda<i class="bi bi-plus"></i></button>
+            <button class="btn btn-danger mb-3 mt-3" onclick="location.href = '/funcionario/deletartodo/produto'">Deletar Todos <i class="bi bi-recycle"></i></button>
+          </div>
+          <div>
+            <input type="text" placeholder="Pesquise o item aqui ..." id="pesquisar" class="w-100  form-control " title="Procure seu item aqui">
+          </div>
+        </div>
+        <table class="table table-striped table-hover">
+          <tr>
+            <th>Nome</th>
+            <th>Valor</th>
+            <th>Qntd</th>
+            <th>Data de Fabricação</th>
+            <th colspan="2" class="text-center">Ações</th>
+          </tr>
+          <%
+            for(let i=0; i < data.length;i++){
+          %>
+          <tr id="<%=data[i].id%>">
+            <td><%=data[i].nome%></td>
+            <td><%=data[i].valor%></td>
+            <td><%=data[i].quantidade%></td>
+            <td><%=data[i].data_de_vendas%></td>
+            <td><button class="btn btn-primary atualizar"  data-toggle="modal" data-target="#modalAtualizar">Alterar <i class="bi bi-pencil-square"></i> </button></td>
+            <td><button class="btn btn-danger deletar" data-toggle="modal" data-target="#modalDeletar">Deletar <i class="bi-trash-fill"></i> </button></td>
+          </tr>
+          <%
+            }
+          %>
+        </table>
+      </main>
+  <%
+    }
+  %>
+
+  <!-- Modal de Cadastrar Produto -->
+  <!-- The Modal -->
+<div class="modal" id="modalCadastrar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Cadastrar Venda</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form action="/funcionario/registrar/venda" method="post" autocomplete="off">
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Insira o nome do produto*" name="nomeProduto" required>
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Insira a marca do produto" name="marcaProduto">
+            </div>
+          </div>
+          <div class="input-group mb-3 mt-3">
+            <span class="input-group-text"><i class="bi bi-cash"></i></span>
+            <input type="text" class="form-control" name="valorProduto" aria-label="Dollar amount (with dot and two decimal places)" placeholder="Insira o valor do produto*" required>
+          </div>
+          <div class="input-group mb-3 mt-3">
+            <span class="input-group-text"><i class="bi bi-box-seam"></i></span>
+            <input type="number" class="form-control" name="quantidade" aria-label="Dollar amount (with dot and two decimal places)" placeholder="Insira a quantidade do produto*" required>
+          </div>
+          <div class="input-group mb-3 mt-3">
+            <input type="date" class="form-control" name="data_de_vendas" id="dataFabricacao" title="Data de Fabricação do Produto" required>
+          </div>
+          <div class="mb-3 mt-3">
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+  <!-- Modal Atualizar -->
+  <!-- The Modal -->
+<div class="modal" id="modalAtualizar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Atualizar Produto</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form action="/funcionario/atualizar/venda" method="post" autocomplete="off">
+          <div class="row">
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Insira o nome do produto" name="nome">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Insira a marca do produto" name="marca">
+            </div>
+          </div>
+          <div class="input-group mb-3 mt-3">
+            <span class="input-group-text">R$</span>
+            <input type="text" class="form-control" name="valor" aria-label="Dollar amount (with dot and two decimal places)" placeholder="Insira o valo do produto" >
+          </div>
+          <div class="input-group mb-3 mt-3">
+            <span class="input-group-text">Qntd</span>
+            <input type="number" class="form-control" name="quantidade" placeholder="Insira a quantidade do produto*">
+          </div>
+          <div class="input-group mb-3 mt-3">
+            <input type="date" class="form-control" name="data_de_vendas id="dataFabricacao" title="Data de Fabricação do Produto" >
+          </div>
+          <input type="hidden" name="id" id="inputAtualizarHidden">
+          <div class="mb-3 mt-3">
+            <button type="submit" class="btn btn-primary">Atualizar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+  <!-- Modal Deletar -->
+  <!-- The Modal -->
+<div class="modal" id="modalDeletar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Deletar Produito</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <h4>Tem certeza que quer deletar esse produto?</h4>
+          <form action="/funcionario/deletar/venda" method="post">
+            <div class="mb-3 mt-3">
+              <input type="hidden" name="id" id="inputDeletarHidden">
+              <button type="submit" class="btn btn-danger" id="deletarModalBtn">Deletar</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+          </form>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

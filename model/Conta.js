@@ -1,44 +1,29 @@
-const conexao = require("../db")
+const conexao = require("../db");
 
-class Cliente{
-    add(values,res){
-        const sql = "INSERT INTO contas SET ?"
-        conexao.query(sql, values, (erro, result)=>{
-            if(erro){
-                console.log(erro)
-            }else{
-                res.redirect("/")
-            }
-        })
-    }
 
-    atualizar(id, values, res){
-        const sql = "UPDATE contas SET ? WHERE id=?"
-        conexao.query(sql, [values, id], (erro, result)=>{
-            if(erro){
-                console.log(erro)
-            }else{
-                res.redirect("/")
-            }
+
+class Conta{
+    autenticar_conta_cliente(email, senha){
+        return new Promise((resolve, reject) => {
+            const sql = "SELECT email, senha FROM contas WHERE email=? and senha=? and tipo='cliente'"
+            let resultado = conexao.query(sql,[email, senha], (error, result)=>{
+                if (error){
+                    reject(error)
+                }else{
+                    if(result.length > 0){
+                        if(result[0].email == email && result[0].senha == senha){
+                            resolve(true)
+                        }
+                    }
+                    else{
+                        resolve(false)
+                    }
+                }
+            })
         })
     }
 }
 
-class Funcionario{
-    signIn(email,senha){
-        const sql = `SELECT * FROM contas where email=${'"'+email+'"'} and senha=${'"'+senha+'"'}`
-        const resu = conexao.query(sql, (erro, result)=>{
-            if(parseInt(result.length) == 1){
-                return  true
-            }
-            else{
-                return false
-            }
-        })
-
-        return resu
-    }
-}
 
 
-module.exports = new Funcionario
+module.exports = new Conta
